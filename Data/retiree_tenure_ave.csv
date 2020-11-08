@@ -1,0 +1,38 @@
+avg,dept_name,title
+22.4615384615384615,Customer Service,Engineer
+24.0370370370370370,Customer Service,Senior Engineer
+24.2354377397976979,Customer Service,Senior Staff
+22.8420441347270616,Customer Service,Staff
+26.8333333333333333,Customer Service,Technique Leader
+22.8104448742746615,Development,Assistant Engineer
+22.4398555630783119,Development,Engineer
+24.3282455143297881,Development,Senior Engineer
+24.3108974358974359,Development,Senior Staff
+22.6666666666666667,Development,Staff
+27.8310529446757882,Development,Technique Leader
+24.3709375000000000,Finance,Senior Staff
+22.7592975206611570,Finance,Staff
+24.1816906348649597,Human Resources,Senior Staff
+22.8716216216216216,Human Resources,Staff
+24.2887729892945375,Marketing,Senior Staff
+22.7347865576748411,Marketing,Staff
+22.6602150537634409,Production,Assistant Engineer
+22.5418144956918398,Production,Engineer
+24.3681328545780969,Production,Senior Engineer
+24.2896174863387978,Production,Senior Staff
+22.7472527472527473,Production,Staff
+27.7307206068268015,Production,Technique Leader
+22.9813084112149533,Quality Management,Assistant Engineer
+22.5141562853907135,Quality Management,Engineer
+24.4835073068893528,Quality Management,Senior Engineer
+27.6303030303030303,Quality Management,Technique Leader
+22.0000000000000000,Research,Assistant Engineer
+22.7500000000000000,Research,Engineer
+29.0000000000000000,Research,Manager
+24.9459459459459459,Research,Senior Engineer
+24.3868255080588648,Research,Senior Staff
+22.7336343115124153,Research,Staff
+28.7500000000000000,Research,Technique Leader
+29.0000000000000000,Sales,Manager
+24.4175251896297974,Sales,Senior Staff
+22.7659340659340659,Sales,Staff

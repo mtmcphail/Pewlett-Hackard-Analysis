@@ -54,6 +54,15 @@ FROM unique_titles
 GROUP BY title
 ORDER BY COUNT DESC;
 
+-- ADDED QUERY: What are the totals after stripping out terminated employees?
+SELECT COUNT(emp_no), title
+INTO current_ret_titles
+FROM unique_titles
+WHERE to_date = '9999-01-01'
+GROUP BY title
+ORDER BY COUNT DESC;
+
+
 -- DELIVERABLE 2
 -- Retrieve the emp_no, first_name, last_name, and birth_date columns from the Employees table.
 -- Retrieve the from_date and to_date columns from the Department Employee table.
@@ -81,3 +90,113 @@ FROM employees AS e
 WHERE (e.birth_date BETWEEN '1965-01-01' AND '1965-12-31') and 
 		(de.to_date = '9999-01-01')
 ORDER BY e.emp_no;
+
+-- ADDED QUERIES    ADDED QUERIES    ADDED QUERIES --
+------------------------------------------------------
+-- Summary output of employees eligible for mentorship program by title
+SELECT COUNT(emp_no), title
+INTO mentoree_titles
+FROM mentor_eligibility
+GROUP BY title
+ORDER BY COUNT DESC;
+
+-- Summary output of retirees by department (not title)
+SELECT DISTINCT ON (ut.emp_no) ut.emp_no,
+    ut.first_name,
+	ut.last_name,
+	ut.title,
+	ut.to_date,
+	de.dept_no,
+	d.dept_name
+INTO retiree_with_dept
+FROM unique_titles AS ut
+	LEFT JOIN dept_emp AS de
+		ON (ut.emp_no = de.emp_no AND ut.to_date = de.to_date)
+	LEFT JOIN departments AS d
+		ON (de.dept_no = d.dept_no)
+WHERE ut.to_date = '9999-01-01';
+
+SELECT COUNT(rwd.emp_no), rwd.dept_name, rwd.title
+INTO retiree_by_dept_title
+FROM retiree_with_dept as rwd
+GROUP BY rwd.dept_name, rwd.title
+ORDER BY rwd.dept_name;
+
+SELECT COUNT(rwd.emp_no), rwd.dept_name
+INTO retiree_by_dept
+FROM retiree_with_dept as rwd
+GROUP BY rwd.dept_name
+ORDER BY rwd.dept_name;
+-- Summary output of mentorees by department (not title)
+SELECT DISTINCT ON (me.emp_no) me.emp_no,
+    me.first_name,
+	me.last_name,
+	me.title,
+	me.to_date,
+	de.dept_no,
+	d.dept_name
+INTO mentoree_with_dept
+FROM mentor_eligibility AS me
+	LEFT JOIN dept_emp AS de
+		ON (me.emp_no = de.emp_no AND me.to_date = de.to_date)
+	LEFT JOIN departments AS d
+		ON (de.dept_no = d.dept_no);
+
+SELECT COUNT(mwd.emp_no), mwd.dept_name, mwd.title
+INTO mentoree_by_dept_title
+FROM mentoree_with_dept as mwd
+GROUP BY mwd.dept_name, mwd.title
+ORDER BY mwd.dept_name;
+
+SELECT COUNT(mwd.emp_no), mwd.dept_name
+INTO mentoree_by_dept
+FROM mentoree_with_dept as mwd
+GROUP BY mwd.dept_name
+ORDER BY mwd.dept_name;
+
+-- ADDED QUERIES    ADDED QUERIES    ADDED QUERIES --
+------------------------------------------------------
+-- Potential retirees with tenure: Copy csv file to protect original
+SELECT * 
+INTO retirees_list
+FROM retirement_titles;
+
+-- Potential retirees with tenure: 
+-- Copy csv file to protect original
+SELECT * 
+INTO retirees_list
+FROM retirement_titles;
+
+-- Step 1: updating from_date to current date
+SELECT emp_no, first_name, last_name, title, from_date, to_date,
+  CASE
+    WHEN to_date = '9999-01-01' THEN '2020-11-07'
+    ELSE to_date
+  END 
+  AS to_date2
+INTO retirees_updt
+FROM retirees_list
+WHERE to_date = '9999-01-01';
+
+-- Step 2: create tenure variable and calculate days/365 for years of service in current position
+ALTER TABLE retirees_updt 
+ADD tenure INT;
+UPDATE retirees_updt
+SET tenure = (to_date2 - from_date)/365;
+
+-- Ouput for query shows lowest number of years of tenure
+SELECT * FROM retirees_updt
+ORDER BY tenure;
+
+-- ADDED QUERIES    ADDED QUERIES    ADDED QUERIES --
+------------------------------------------------------
+-- Quick check on total current employees
+SELECT COUNT(emp_no) 
+FROM dept_emp
+WHERE to_date = '9999-01-01'
+--Quick check on current employees by department
+SELECT COUNT(emp_no) 
+FROM dept_emp
+WHERE to_date = '9999-01-01'
+GROUP BY emp_no
+ORDER BY emp_no;
